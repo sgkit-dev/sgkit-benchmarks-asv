@@ -31,5 +31,25 @@
         "version": "fb11db6a5b627835f0a682aa2ce1c793f9156522529ddfde2938933cc2278ff3",
         "warmup_time": -1
     },
+    "benchmarks_vcf.VcfSpeedSuite.track_vcf_to_zarr_speed": {
+        "code": "class VcfSpeedSuite:\n    def track_vcf_to_zarr_speed(self) -> None:\n        duration = _time_func(\n            vcf_to_zarr,\n            self.input_vcf,\n            self.output_zarr,\n            fields=[\"INFO/*\", \"FORMAT/*\"],\n            field_defs=self.field_defs,\n            chunk_length=1_000,\n            target_part_size=None,\n        )\n        return _to_mb_per_s(os.path.getsize(self.input_vcf), duration)\n\n    def setup(self) -> None:\n    \n        asv_env_dir = os.environ[\"ASV_ENV_DIR\"]\n        path = Path(\n            asv_env_dir,\n            \"project/sgkit/tests/io/vcf/data/1000G.phase3.broad.withGenotypes.chr20.10100000.vcf.gz\",\n        )\n        tmp_path = Path(tempfile.mkdtemp())\n        self.input_vcf = tmp_path.joinpath(\"1000G.in.vcf\").as_posix()\n        self.input_zarr = tmp_path.joinpath(\"1000G.in.zarr\").as_posix()\n        self.output_zarr = tmp_path.joinpath(\"1000G.out.zarr\").as_posix()\n        self.output_vcf = tmp_path.joinpath(\"1000G.out.vcf\").as_posix()\n    \n        # decompress file into temp dir so we can measure speed of vcf_to_zarr for uncompressed text\n        _gunzip(path, self.input_vcf)\n    \n        # create a zarr input file so we can measure zarr_to_vcf speed\n        self.field_defs = {\n            \"FORMAT/AD\": {\"Number\": \"R\"},\n        }\n        vcf_to_zarr(\n            self.input_vcf,\n            self.input_zarr,\n            fields=[\"INFO/*\", \"FORMAT/*\"],\n            field_defs=self.field_defs,\n            chunk_length=1_000,\n            target_part_size=None,\n        )",
+        "name": "benchmarks_vcf.VcfSpeedSuite.track_vcf_to_zarr_speed",
+        "param_names": [],
+        "params": [],
+        "timeout": 60.0,
+        "type": "track",
+        "unit": "unit",
+        "version": "4becdf350df482aff6fb5c74ee2d02e613e42617c41095ae04c153ddc5b1ef99"
+    },
+    "benchmarks_vcf.VcfSpeedSuite.track_zarr_to_vcf_speed": {
+        "code": "class VcfSpeedSuite:\n    def track_zarr_to_vcf_speed(self) -> None:\n        # throw away first run due to numba jit compilation\n        for _ in range(2):\n            duration = _time_func(zarr_to_vcf, self.input_zarr, self.output_vcf)\n        return _to_mb_per_s(os.path.getsize(self.output_vcf), duration)\n\n    def setup(self) -> None:\n    \n        asv_env_dir = os.environ[\"ASV_ENV_DIR\"]\n        path = Path(\n            asv_env_dir,\n            \"project/sgkit/tests/io/vcf/data/1000G.phase3.broad.withGenotypes.chr20.10100000.vcf.gz\",\n        )\n        tmp_path = Path(tempfile.mkdtemp())\n        self.input_vcf = tmp_path.joinpath(\"1000G.in.vcf\").as_posix()\n        self.input_zarr = tmp_path.joinpath(\"1000G.in.zarr\").as_posix()\n        self.output_zarr = tmp_path.joinpath(\"1000G.out.zarr\").as_posix()\n        self.output_vcf = tmp_path.joinpath(\"1000G.out.vcf\").as_posix()\n    \n        # decompress file into temp dir so we can measure speed of vcf_to_zarr for uncompressed text\n        _gunzip(path, self.input_vcf)\n    \n        # create a zarr input file so we can measure zarr_to_vcf speed\n        self.field_defs = {\n            \"FORMAT/AD\": {\"Number\": \"R\"},\n        }\n        vcf_to_zarr(\n            self.input_vcf,\n            self.input_zarr,\n            fields=[\"INFO/*\", \"FORMAT/*\"],\n            field_defs=self.field_defs,\n            chunk_length=1_000,\n            target_part_size=None,\n        )",
+        "name": "benchmarks_vcf.VcfSpeedSuite.track_zarr_to_vcf_speed",
+        "param_names": [],
+        "params": [],
+        "timeout": 60.0,
+        "type": "track",
+        "unit": "unit",
+        "version": "1ed3294e5cc6d16a8ebeeea2562ba8d72bff2e09a9dab23bd96d4dc82b8f89a3"
+    },
     "version": 2
 }
