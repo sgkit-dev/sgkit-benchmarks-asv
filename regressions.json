@@ -1,1 +1,1 @@
-{"regressions": [["benchmarks_vcf.VcfSpeedSuite.track_zarr_to_vcf_speed", "graphs/branch-HEAD/machine-github-actions/python-3.8/benchmarks_vcf.VcfSpeedSuite.track_zarr_to_vcf_speed.json", {}, null, 51.89941243896615, 46.1452818008421, [[null, 1062, 46.1452818008421, 51.89941243896615]]]]}
+{"regressions": []}
