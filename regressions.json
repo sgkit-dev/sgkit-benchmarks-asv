@@ -1,1 +1,1 @@
-{"regressions": []}
+{"regressions": [["benchmarks_stats.TimeSuite.time_count_call_alleles", "graphs/branch-HEAD/machine-github-actions/python-3.8/benchmarks_stats.TimeSuite.time_count_call_alleles.json", {}, null, 0.3035379670000111, 0.2357218150000051, [[null, 1062, 0.2357218150000051, 0.3035379670000111]]]]}
