@@ -1,4 +1,14 @@
 {
+    "benchmarks_plink.PlinkSpeedSuite.track_write_plink_speed": {
+        "code": "class PlinkSpeedSuite:\n    def track_write_plink_speed(self) -> None:\n        # throw away first run due to numba jit compilation\n        for _ in range(2):\n            duration = _time_func(write_plink, self.ds, path=self.output_plink)\n        return _to_mb_per_s(get_dir_size(self.dir), duration)\n\n    def setup(self) -> None:\n        self.ds = simulate_genotype_call_dataset(\n            n_variant=1000000, n_sample=1000, seed=0\n        )\n    \n        self.dir = Path(tempfile.mkdtemp())\n        self.output_plink = self.dir / \"plink_out\"",
+        "name": "benchmarks_plink.PlinkSpeedSuite.track_write_plink_speed",
+        "param_names": [],
+        "params": [],
+        "timeout": 60.0,
+        "type": "track",
+        "unit": "unit",
+        "version": "bd0a5d65a483fcc3805fe0397ded0bd7a60b220a9121a1e2fa2fccd2b4dcf304"
+    },
     "benchmarks_stats.TimeSuite.time_count_call_alleles": {
         "code": "class TimeSuite:\n    def time_count_call_alleles(self) -> None:\n        count_call_alleles(self.count_call_alleles_ds)\n\n    def setup(self) -> None:\n        self.count_call_alleles_ds = simulate_genotype_call_dataset(\n            n_variant=100_000, n_sample=1000\n        )\n        self.count_cohort_alleles_ds = simulate_genotype_call_dataset(\n            n_variant=100_000, n_sample=1000\n        )\n        sample_cohort = np.repeat(\n            [0, 1], self.count_cohort_alleles_ds.dims[\"samples\"] // 2\n        )\n        self.count_cohort_alleles_ds[\"sample_cohort\"] = xr.DataArray(\n            sample_cohort, dims=\"samples\"\n        )",
         "min_run_count": 2,
