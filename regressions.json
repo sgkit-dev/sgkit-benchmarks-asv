@@ -1,1 +1,1 @@
-{"regressions": []}
+{"regressions": [["benchmarks_plink.PlinkSpeedSuite.track_write_plink_speed", "graphs/branch-HEAD/machine-github-actions/python-3.8/benchmarks_plink.PlinkSpeedSuite.track_write_plink_speed.json", {}, null, 41.48402597492941, 17.225664780926454, [[null, 1244, 17.225664780926454, 41.48402597492941]]]]}
